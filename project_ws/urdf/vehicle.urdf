@@ -1,0 +1,218 @@
+<robot name="vehicle">
+
+<!--                    DEFINING MATERIALS   -->
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+<!--Defining the robot-->
+<!--                      BASE LINK            -->
+    <link name="base_link">
+         <inertial>
+     <origin xyz="0 0 0.08" rpy="0 0 0"/>
+     <mass value="1"/>
+     <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+   </inertial>
+
+   <visual>
+     <origin xyz="0 0 0.08" rpy="0 0 0" />
+     <geometry>
+       <box size="0.3 0.5 0.1" />
+     </geometry>
+     <material name="blue">
+     </material>
+   </visual>
+
+   <collision>
+     <origin xyz="0 0 0.08" rpy="0 0 0"/>
+     <geometry>
+       <box  size="0.11 0.5 0.1" />
+     </geometry>
+   </collision>
+    </link>
+
+    
+<!--                    RIGHT FRONT WHEEL                       -->
+    <link name="right_front_wheel">
+         <inertial>
+     
+     <mass value="1"/>
+     <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+   </inertial>
+
+   <visual>
+     
+     <geometry>
+       <cylinder  radius ="0.07" length="0.03"/>
+     </geometry>
+     <material name="white">
+     </material>
+   </visual>
+
+   <collision>
+     
+     <geometry>
+       <cylinder  radius ="0.07" length="0.03"/>
+     </geometry>
+   </collision>
+    </link>
+
+<!--                    LEFT FRONT WHEEL                       -->
+    <link name="left_front_wheel">
+         <inertial>
+     <mass value="1"/>
+     <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+   </inertial>
+
+   <visual>
+     <geometry>
+       <cylinder  radius ="0.07" length="0.03"/>
+     </geometry>
+     <material name="white">
+     </material>
+   </visual>
+
+   <collision>
+     <geometry>
+       <cylinder  radius ="0.07" length="0.03"/>
+     </geometry>
+   </collision>
+    </link>
+    
+
+<!--                    RIGHT BACK WHEEL                       -->
+    <link name="right_back_wheel">
+         <inertial>
+     
+     <mass value="1"/>
+     <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+   </inertial>
+
+   <visual>
+     
+     <geometry>
+       <cylinder  radius ="0.07" length="0.03"/>
+     </geometry>
+     <material name="white">
+     </material>
+   </visual>
+
+   <collision>
+     
+     <geometry>
+       <cylinder  radius ="0.07" length="0.03"/>
+     </geometry>
+   </collision>
+    </link>
+
+
+
+    <!--                    LEFT BACK WHEEL                       -->
+    <link name="left_back_wheel">
+         <inertial>
+     
+     <mass value="1"/>
+     <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+   </inertial>
+
+   <visual>
+     
+     <geometry>
+       <cylinder  radius ="0.07" length="0.03"/>
+     </geometry>
+     <material name="white">
+     </material>
+   </visual>
+
+   <collision>
+     
+     <geometry>
+       <cylinder  radius ="0.07" length="0.03"/>
+     </geometry>
+   </collision>
+    </link>
+    <!--                              JOINTS             -->
+    <!--           JOINT BASE TO RIGHT FRONT WHEEL       -->
+
+    <joint name="joint_base_to_right_front_wheel" type="continuous">
+    <origin xyz="0.165 0.24 0.015" rpy="1.57 1.57 1.57"/>
+    <parent link="base_link"/>
+    <child link="right_front_wheel"/>
+    </joint>
+  <!--           JOINT BASE TO LEFT FRONT WHEEL  -->
+
+    <joint name="joint_base_to_left_front_wheel" type="continuous">
+    <origin xyz="-0.165 0.24 0.015" rpy="1.57 1.57 1.57"/>
+    <parent link="base_link"/>
+    <child link="left_front_wheel"/>
+    </joint>
+
+    <!--           JOINT BASE TO RIGHT BACK WHEEL  -->
+    <joint name="joint_base_to_right_back_wheel" type="continuous">
+    <origin xyz="-0.165 -0.24 0.015" rpy="1.57 1.57 1.57"/>
+    <parent link="base_link"/>
+    <child link="right_back_wheel"/>
+    </joint>
+
+  <!--           JOINT BASE TO LEFT BACK WHEEL    -->
+    <joint name="joint_base_to_left_back_wheel" type="continuous">
+    <origin xyz="0.165 -0.24 0.015" rpy="1.57 1.57 1.57"/>
+    <parent link="base_link"/>
+    <child link="left_back_wheel"/>
+    </joint>
+<!--                       ROS CONTROL      -->
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/vehicle</robotNamespace>
+  </plugin>
+</gazebo>
+<!--                    MOTORS AND ACTUATORS            -->
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_base_to_left_back_wheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_base_to_right_back_wheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+   <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_base_to_left_front_wheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_base_to_right_front_wheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+
+</robot>
