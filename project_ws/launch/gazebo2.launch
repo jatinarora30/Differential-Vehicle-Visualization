@@ -15,8 +15,7 @@
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="headless" value="$(arg headless)"/>
-  </include>
-
+    </include>
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
 
   <!-- push robot_description to factory and spawn robot in gazebo -->
@@ -24,16 +23,13 @@
         args="-z 1.0 -unpause -urdf -model robot -param robot_description" respawn="false" output="screen" />
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find project_ws)/config/diffdrive.yaml" command="load"/>
 
-  <!-- load the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" ns="/vehicle" args="vehicle_velocity_controller joint_state_controller"/>
 
   <!-- convert joint states to TF transforms for rviz, etc -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
     respawn="false" output="screen">
-    <remap from="/joint_states" to="vehicle/joint_states" />
+  </node>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
   </node>
 
 </launch>
