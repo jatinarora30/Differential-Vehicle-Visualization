@@ -17,8 +17,8 @@
     <link name="base_link">
          <inertial>
      <origin xyz="0 0 0.08" rpy="0 0 0"/>
-     <mass value="1"/>
-     <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+     <mass value="21.6"/>
+     <inertia ixx="0.306"  ixy="0"  ixz="0" iyy="0.36" iyz="0" izz="0.54" />
    </inertial>
 
    <visual>
@@ -41,8 +41,8 @@
 <!--                    RIGHT FRONT WHEEL                       -->
     <link name="right_front_wheel">
     <inertial>
-     <mass value="0.5"/>
-     <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+     <mass value="0.54"/>
+     <inertia ixx="0.000702"  ixy="0"  ixz="0" iyy="0.000702" iyz="0" izz="0.001323" />
    </inertial>
 
    <visual>
@@ -64,8 +64,8 @@
     <link name="right_back_wheel">
       <inertial>
      
-     <mass value="0.5"/>
-     <inertia ixx="10"  ixy="0"  ixz="0" iyy="10" iyz="0" izz="10" />
+     <mass value="0.54"/>
+     <inertia ixx="0.000702"  ixy="0"  ixz="0" iyy="0.000702" iyz="0" izz="0.001323" />
    </inertial>
 
    <visual>
@@ -113,8 +113,8 @@
     <link name="left_front_wheel">
       <inertial>
      
-     <mass value="0.5"/>
-     <inertia ixx="10"  ixy="0"  ixz="0" iyy="10" iyz="0" izz="10" />
+     <mass value="0.54"/>
+     <inertia ixx="0.000702"  ixy="0"  ixz="0" iyy="0.000702" iyz="0" izz="0.001323" />
    </inertial>
 
    <visual>
@@ -138,8 +138,8 @@
     <link name="left_back_wheel">
     <inertial>
      
-     <mass value="0.5"/>
-     <inertia ixx="10"  ixy="0"  ixz="0" iyy="10" iyz="0" izz="10" />
+     <mass value="0.54"/>
+     <inertia ixx="0.000702"  ixy="0"  ixz="0" iyy="0.000702" iyz="0" izz="0.001323" />
    </inertial>
 
    <visual>
@@ -164,6 +164,7 @@
 
     <joint name="joint_base_to_right_front_wheel" type="continuous">
     <origin xyz="0.115 0.09 0.07" rpy="1.57079633 1.57079633 1.57079633"/>
+    <axis xyz="0 0 1" rpy="0 0 0" />  
     <parent link="base_link"/>
     <child link="right_front_wheel"/>
     </joint>
@@ -171,7 +172,8 @@
         <!--           JOINT BASE TO RIGHT BACK WHEEL  -->
     <joint name="joint_base_to_right_back_wheel" type="continuous">
     <origin xyz="0.115 -0.09 0.07" rpy="1.57079633 1.57079633 1.57079633"/>
-    <parent link="base_link"/>
+    <axis xyz="0 0 1"  rpy="0 0 0"/>  
+    <parent link="base_link"/> 
     <child link="right_back_wheel"/>
     </joint>
 
@@ -179,6 +181,7 @@
 
     <joint name="joint_base_to_left_front_wheel" type="continuous">
     <origin xyz="-0.115 0.09 0.07" rpy="1.57079633 1.57079633 1.57079633"/>
+    <axis xyz="0 0 1" rpy="0 0 0" />  
     <parent link="base_link"/>
     <child link="left_front_wheel"/>
     </joint>
@@ -192,7 +195,8 @@
 
       <!--           JOINT BASE TO LEFT BACK WHEEL    -->
     <joint name="joint_base_to_left_back_wheel" type="continuous">
-    <origin xyz="-0.115 -0.09 0.07" rpy="1.57079633 1.57079633 1.57079633"/>
+    <origin xyz="-0.115 -0.09 0.07" rpy="1.57079633 1.57079633 1.57079633" />
+    <axis xyz="0 0 1" rpy="0 0 0" />  
     <parent link="base_link"/>
     <child link="left_back_wheel"/>
     </joint>
@@ -240,7 +244,7 @@
 <gazebo>
   <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
     <updateRate>100.0</updateRate>
-    <robotNamespace>vehiclediffdrive/</robotNamespace>
+    <robotNamespace>vehiclediffdrive</robotNamespace>
     <leftFrontJoint>joint_base_to_left_front_wheel</leftFrontJoint>
     <rightFrontJoint>joint_base_to_right_front_wheel</rightFrontJoint>
     <leftRearJoint>joint_base_to_left_back_wheel</leftRearJoint>
