@@ -2,14 +2,14 @@
 
 <!--                    DEFINING MATERIALS   -->
   <material name="blue">
-    <color rgba="0 0 0.8 1"/>
+    <color rgba="0 0 1 1"/>
   </material>
 
   <material name="white">
     <color rgba="1 1 1 1"/>
   </material>
 <material name="green">
-    <color rgba=" 1 0.5 0.5 1"/>
+    <color rgba=" 0.5 0.2 0.8 1"/>
   </material>
 
 <!--Defining the robot-->
@@ -37,6 +37,10 @@
      </geometry>
    </collision>
     </link>
+    <gazebo reference="base_link">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
     <!--                    RIGHT FRONT WHEEL                       -->
 <!--                    RIGHT FRONT WHEEL                       -->
     <link name="right_front_wheel">
@@ -55,10 +59,13 @@
 
    <collision>
      <geometry>
-       \<cylinder  radius ="0.07" length="0.03"/>
+      <cylinder  radius ="0.07" length="0.03"/>
      </geometry>
    </collision>
     </link>
+    <gazebo reference="right_front_wheel">
+    <material>Gazebo/White</material>
+  </gazebo>
 
     <!--                    RIGHT BACK WHEEL                       -->
     <link name="right_back_wheel">
@@ -84,6 +91,9 @@
      </geometry>
    </collision>
     </link>
+    <gazebo reference="right_back_wheel">
+    <material>Gazebo/White</material>
+  </gazebo>
 
             <!--                    CAMERA LINK                     -->
     <link name="camera_link">
@@ -108,6 +118,10 @@
      </geometry>
    </collision>
     </link>
+    <gazebo reference="camera_link">
+    <material>Gazebo/Green</material>
+  </gazebo>
+
 
     <!--                    LEFT FRONT WHEEL                       -->
     <link name="left_front_wheel">
@@ -133,6 +147,9 @@
      </geometry>
    </collision>
     </link>
+    <gazebo reference="left_front_wheel">
+    <material>Gazebo/White</material>
+    </gazebo>
     
         <!--                    LEFT BACK WHEEL                       -->
     <link name="left_back_wheel">
@@ -157,7 +174,10 @@
        <cylinder  radius ="0.07" length="0.03"/>
      </geometry>
    </collision>
-    </link>
+    </link><gazebo reference="left_back_wheel">
+    <material>Gazebo/White</material>
+  </gazebo>
+
 
         <!--                              JOINTS             -->
     <!--           JOINT BASE TO RIGHT FRONT WHEEL       -->
@@ -188,7 +208,7 @@
 
         <!--           JOINT BASE TO CAMERA    -->
     <joint name="joint_base_to_camera_link" type="fixed">
-    <origin xyz="0.05 0.14 0.165"/>
+    <origin xyz="0.05 -0.14 0.165" rpy ="0 0 4.712 "/>
     <parent link="base_link"/>
     <child link="camera_link"/>
     </joint>
@@ -244,7 +264,7 @@
 <gazebo>
   <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
     <updateRate>100.0</updateRate>
-    <robotNamespace>vehiclediffdrive</robotNamespace>
+    <robotNamespace>vehiclediffdrive</robotNamespace> 
     <leftFrontJoint>joint_base_to_left_front_wheel</leftFrontJoint>
     <rightFrontJoint>joint_base_to_right_front_wheel</rightFrontJoint>
     <leftRearJoint>joint_base_to_left_back_wheel</leftRearJoint>
