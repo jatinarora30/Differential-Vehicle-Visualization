@@ -95,7 +95,7 @@
     <material>Gazebo/White</material>
   </gazebo>
 
-            <!--                    CAMERA LINK                     -->
+   <!--                    CAMERA LINK                     -->
     <link name="camera_link">
      <inertial>
       <mass value="0.4"/>
@@ -105,7 +105,7 @@
    <visual>
      
      <geometry>
-       <box   size= "0.05 0.05 0.05"/>
+       <box   size= "0.05 0.05 0.08"/>
      </geometry>
      <material name="green">
      </material>
@@ -114,13 +114,43 @@
    <collision>
      
      <geometry>
-       <box   size= "0.05 0.05 0.05"/>
+       <box   size= "0.05 0.05 0.08"/>
      </geometry>
    </collision>
     </link>
+
     <gazebo reference="camera_link">
     <material>Gazebo/Green</material>
   </gazebo>
+
+    <!--                    LASER LINK                     -->
+    <link name="laser_link">
+     <inertial>
+      <mass value="0.4"/>
+     <inertia ixx="1"  ixy="0"  ixz="0" iyy="1" iyz="0" izz="1" />
+   </inertial>
+
+   <visual>
+     
+     <geometry>
+       <box   size= "0.05 0.05 0.08"/>
+     </geometry>
+     <material name="green">
+     </material>
+   </visual>
+
+   <collision>
+     
+     <geometry>
+       <box   size= "0.05 0.05 0.08"/>
+     </geometry>
+   </collision>
+    </link>
+    
+    <gazebo reference="laser_link">
+    <material>Gazebo/Green</material>
+  </gazebo>
+
 
 
     <!--                    LEFT FRONT WHEEL                       -->
@@ -213,6 +243,13 @@
     <child link="camera_link"/>
     </joint>
 
+    <!--           JOINT BASE TO LASER    -->
+    <joint name="joint_base_to_laser_link" type="fixed">
+    <origin xyz="-0.04 -0.14 0.165" rpy ="0 0 4.712 "/>
+    <parent link="base_link"/>
+    <child link="laser_link"/>
+    </joint>
+
       <!--           JOINT BASE TO LEFT BACK WHEEL    -->
     <joint name="joint_base_to_left_back_wheel" type="continuous">
     <origin xyz="-0.115 -0.09 0.07" rpy="1.57079633 1.57079633 1.57079633" />
@@ -220,7 +257,7 @@
     <parent link="base_link"/>
     <child link="left_back_wheel"/>
     </joint>
-
+<!--                    CAMERA  PLUGIN                 -->
     <gazebo reference="camera_link">
     <sensor type="camera" name="camera1">
       <update_rate>30.0</update_rate>
@@ -260,6 +297,43 @@
       </plugin>
     </sensor>
   </gazebo>
+
+<!--                        LASER PLUGIN                  -->
+<gazebo reference="laser_link">
+    <sensor type="gpu_ray" name="head_hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.570796</min_angle>
+            <max_angle>1.570796</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+         
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_gpu_laser.so">
+        <topicName>/vehiclediffdrive/laser/scan</topicName>
+        <frameName>laser_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+
 <!--                       ROS CONTROL      -->
 <gazebo>
   <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">

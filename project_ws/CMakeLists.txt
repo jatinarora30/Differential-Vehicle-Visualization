@@ -13,15 +13,19 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   diff_drive_controller
   controller_manager
-  gazebo_ros_control
-
-
+  cv_bridge 
+  image_transport 
+  gazebo_ros_control 	
 )
 
+find_package(OpenCV REQUIRED)
+add_executable(image_converter src/image_converter.cpp)
+
+target_link_libraries(image_converter ${OpenCV_LIBS})
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
-
+##include_directories(${OpenCV_INCLUDE_DIRS})
+   
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
@@ -110,9 +114,9 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES project_ws
-  CATKIN_DEPENDS roscpp rospy std_msgs diff_drive_controller controller_manager gazebo_ros_control
-  DEPENDS system_lib
-)
+  CATKIN_DEPENDS roscpp rospy std_msgs diff_drive_controller controller_manager gazebo_ros_control cv_bridge image_transport 
+  DEPENDS system_lib OpenCV
+  )
 
 ###########
 ## Build ##
@@ -121,7 +125,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+ include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -138,7 +142,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/project_ws_node.cpp)
+ ##add_executable(image_converter src/image_converter.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -151,9 +155,9 @@ include_directories(
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
+ ##target_link_libraries(src/image_converter.cpp
+  # OpenCV
+ #)
 
 #############
 ## Install ##
