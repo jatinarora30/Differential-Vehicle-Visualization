@@ -5,34 +5,39 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-static const std::string OPENCV_WINDOW = "Image window";
+static const std::string OPENCV_WINDOW = "Raw Image window";
+static const std::string OPENCV_WINDOW_1 = "Edge Detection";
 
-class ImageConverter
+class image_converter
 {
   ros::NodeHandle nh_;
   image_transport::ImageTransport it_;
   image_transport::Subscriber image_sub_;
   image_transport::Publisher image_pub_;
-
+  
 public:
-  ImageConverter()
+  image_converter()
     : it_(nh_)
   {
-    // Subscrive to input video feed and publish output video feed
-    image_sub_ = it_.subscribe("/vehiclediffdrive/camera1/image_raw", 1, &ImageConverter::imageCb, this);
-    image_pub_ = it_.advertise("/image_converter/output_video", 1);
-
+    // Subscribe to input video feed and publish output video feed
+    image_sub_ = it_.subscribe("/camera/rgb/image_raw", 1, 
+      &image_converter::imageCb, this);
+    image_pub_ = it_.advertise("/image_converter/raw_image", 1);
     cv::namedWindow(OPENCV_WINDOW);
+
   }
 
-  ~ImageConverter()
+  ~image_converter()
   {
     cv::destroyWindow(OPENCV_WINDOW);
   }
 
   void imageCb(const sensor_msgs::ImageConstPtr& msg)
   {
+
     cv_bridge::CvImagePtr cv_ptr;
+    namespace enc = sensor_msgs::image_encodings;
+
     try
     {
       cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
@@ -44,22 +49,46 @@ public:
     }
 
     // Draw an example circle on the video stream
-    if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
-      cv::circle(cv_ptr->image, cv::Point(50, 50), 10, CV_RGB(255,0,0));
+    if (cv_ptr->image.rows > 400 && cv_ptr->image.cols > 600){
 
-    // Update GUI Window
-    cv::imshow(OPENCV_WINDOW, cv_ptr->image);
-    cv::waitKey(3);
+	    detect_edges(cv_ptr->image);
+    	image_pub_.publish(cv_ptr->toImageMsg());
 
-    // Output modified video stream
-    image_pub_.publish(cv_ptr->toImageMsg());
+	}
   }
+  void detect_edges(cv::Mat img)
+  {
+
+   	cv::Mat src, src_gray;
+	cv::Mat dst, detected_edges;
+
+	int edgeThresh = 1;
+	int lowThreshold = 200;
+	int highThreshold =300;
+	int kernel_size = 5;
+
+	img.copyTo(src);
+
+	cv::cvtColor( img, src_gray, CV_BGR2GRAY );
+  cv::blur( src_gray, detected_edges, cv::Size(5,5) );
+	cv::Canny( detected_edges, detected_edges, lowThreshold, highThreshold, kernel_size );
+
+  	dst = cv::Scalar::all(0);
+  	img.copyTo( dst, detected_edges);
+	dst.copyTo(img);
+
+    	cv::imshow(OPENCV_WINDOW, src);
+    	cv::imshow(OPENCV_WINDOW_1, dst);
+    	cv::waitKey(3);
+
+  }	
+ 
 };
 
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "image_converter");
-  ImageConverter ic;
+  image_converter ic;
   ros::spin();
   return 0;
 }

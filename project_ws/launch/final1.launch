@@ -22,8 +22,8 @@
   <!-- push robot_description to factory and spawn robot in gazebo -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
         args="-z 1.0 -unpause -urdf -model robot -param robot_description" respawn="false" output="screen" />
-
-  <!-- Load joint controller configurations from YAML file to parameter server -->
+ <!--  OpenCV Node  -->
+  <node name="image_converter" pkg="project_ws" type="image_converter"/>
 
 
   <!-- convert joint states to TF transforms for rviz, etc -->
@@ -32,5 +32,5 @@
   </node>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
   </node>
-   <node type="rviz" name="rviz" pkg="rviz" args="-d $(find project_ws)/rviz/urdf.rviz" />
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find project_ws)/rviz/urdf.rviz" />
 </launch>

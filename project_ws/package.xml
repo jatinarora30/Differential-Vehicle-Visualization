@@ -70,21 +70,15 @@
     <exec_depend> gazebo_ros_control</exec_depend>
   <build_depend>gazebo_ros_control</build_depend>
   <build_export_depend>gazebo_ros_control</build_export_depend>
-  image_transport
-      <exec_depend> sensor_msgs</exec_depend>
+   <build_depend>cv_bridge</build_depend>
   <build_depend>sensor_msgs</build_depend>
-  <build_export_depend>sensor_msgs</build_export_depend>
-
-      <exec_depend> cv_bridge</exec_depend>
-  <build_depend>cv_bridge</build_depend>
   <build_export_depend>cv_bridge</build_export_depend>
-  
-        <exec_depend> image_transport</exec_depend>
-  <build_depend> image_transport</build_depend>
-  <build_export_depend> image_transport</build_export_depend>
-  
-  <exec_depend>cvBlob</exec_depend>
-  <build_depend>OpenCV</build_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <build_export_depend>image_transport</build_export_depend>
+  <build_depend>image_transport</build_depend>
+  <exec_depend>image_transport</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
